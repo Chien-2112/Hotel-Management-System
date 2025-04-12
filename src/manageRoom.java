@@ -29,6 +29,8 @@ public class manageRoom extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -64,6 +66,11 @@ public class manageRoom extends javax.swing.JFrame {
                 "Room Number", "Room Type", "Bed", "Price", "Status"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 520, 400));
@@ -109,6 +116,28 @@ public class manageRoom extends javax.swing.JFrame {
         });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 480, -1, -1));
 
+        jButton3.setBackground(new java.awt.Color(112, 0, 0));
+        jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setText("Update Room");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 480, -1, -1));
+
+        jButton4.setBackground(new java.awt.Color(112, 0, 0));
+        jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Delete Room");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 480, -1, -1));
+
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/all pages background.png"))); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -151,6 +180,58 @@ public class manageRoom extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formComponentShown
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // DELETE ROOM.
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Choose a room to delete!");
+            return;
+        }
+
+        String roomNo = jTable1.getValueAt(selectedRow, 0).toString();
+
+        // Xác nhận trước khi xóa
+        int confirm = JOptionPane.showConfirmDialog(null, "Do you really want delete " + roomNo + "?", "Select", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            String Query = "DELETE FROM room WHERE roomNo='" + roomNo + "'";
+            InsertUpdateDelete.setData(Query, "Delete Room Successfully!");
+
+            setVisible(false);
+            new manageRoom().setVisible(true);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // UPDATE ROOM.
+        String roomNo = jTextField1.getText();
+        String roomType = (String) jComboBox1.getSelectedItem();
+        String bed = (String) jComboBox2.getSelectedItem();
+        String price = jTextField2.getText();
+
+        // Kiểm tra xem các trường có trống không
+        if (roomNo.isEmpty() || price.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "All Field Is Required!");
+            return;
+        }
+
+        String Query = "UPDATE room SET roomType='" + roomType + "', bed='" + bed + "', price='" + price + "' WHERE roomNo='" + roomNo + "'";
+        InsertUpdateDelete.setData(Query, "Update Room Successfully!");
+
+        setVisible(false);
+        new manageRoom().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // Khi người dùng click vào 1 hàng trên bảng.
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            jTextField1.setText(jTable1.getValueAt(selectedRow, 0).toString());
+            jComboBox1.setSelectedItem(jTable1.getValueAt(selectedRow, 1).toString());
+            jComboBox2.setSelectedItem(jTable1.getValueAt(selectedRow, 2).toString());
+            jTextField2.setText(jTable1.getValueAt(selectedRow, 3).toString());
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -187,6 +268,8 @@ public class manageRoom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
