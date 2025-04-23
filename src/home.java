@@ -50,12 +50,22 @@ public class home extends javax.swing.JFrame {
         jButton3.setForeground(new java.awt.Color(112, 0, 0));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Customer Check Out.png"))); // NOI18N
         jButton3.setText("Customer Check out");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(507, 15, -1, -1));
 
         jButton4.setFont(new java.awt.Font("Algerian", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(112, 0, 0));
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Customer Details Bill.png"))); // NOI18N
         jButton4.setText("Customer Details Bill");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(779, 15, -1, -1));
 
         jButton5.setFont(new java.awt.Font("Algerian", 1, 14)); // NOI18N
@@ -106,14 +116,24 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Manage Room button.
+        // MANAGE ROOM BUTTON
         new manageRoom().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Customer Check IN.
+        // CUSTOMER CHECK IN.
         new CustomerCheckIn().setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // CUSTOMER CHECK OUT.
+        new CustomerCheckOut().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // CUSTOMER DETAILS BILL.
+        new CustomerDetailsBill().setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
