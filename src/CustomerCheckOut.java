@@ -2,6 +2,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -243,6 +244,10 @@ public class CustomerCheckOut extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // SEARCH BUTTON.
         String roomNo = jTextField1.getText();
+        if(roomNo.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter Room Number!");
+            return;
+        }
         try
         {
             ResultSet rs = Select.getData("select * from customer where roomNo='"+roomNo+"' and checkout is NULL");
@@ -254,12 +259,13 @@ public class CustomerCheckOut extends javax.swing.JFrame {
                 jTextField3.setText(rs.getString(9));
                 jTextField5.setText(rs.getString(3));
                 jTextField6.setText(rs.getString(13));
+                jTextField9.setText(rs.getString(6));
                 
                 SimpleDateFormat myFormat = new SimpleDateFormat("yyyy/MM/dd");
                 Calendar cal = Calendar.getInstance();
                 jTextField4.setText(myFormat.format(cal.getTime()));
-                String dateBeforeString = rs.getString(9);
                 
+                String dateBeforeString = rs.getString(9);
                 java.util.Date dateBefore = myFormat.parse(dateBeforeString);
                 String dateAfterString = myFormat.format(cal.getTime());
                 java.util.Date dateAfter = myFormat.parse(dateAfterString);
@@ -273,9 +279,11 @@ public class CustomerCheckOut extends javax.swing.JFrame {
                 float price = Float.parseFloat(jTextField6.getText());
                 
                 jTextField8.setText(String.valueOf(noOfDayStay*price));
-                jTextField9.setText(rs.getString(6));
                 roomType = rs.getString(12);
                 bed = rs.getString(11);
+                
+                // Tính tiền dịch vụ khách sử dụng.
+                calculateServiceCost(id);
             }
             else 
             {
@@ -289,7 +297,36 @@ public class CustomerCheckOut extends javax.swing.JFrame {
             Logger.getLogger(CustomerCheckOut.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    
+    private void calculateServiceCost(int customerId) {
+        double serviceCost = 0.0;
+        ResultSet rsServices = Select.getData("select s.price " + "from customer_services cs " + "join services s on cs.serviceId = s.serviceId " + "where cs.customerId = " + customerId);
+        if(rsServices == null) 
+            {
+                JOptionPane.showMessageDialog(null, "Database query failed: ResultSet is null.");
+                return;
+            }
+        try 
+        {
+            while(rsServices.next()) {
+                double price = rsServices.getDouble("price");
+                if(rsServices.wasNull()) {
+                    price = 0;
+                }
+                serviceCost += price;
+            }
+        }
+        catch(HeadlessException | SQLException e)
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+        // Cập nhật tổng tiền (tiền phòng + dịch vụ).
+        float roomCost = Float.parseFloat(jTextField8.getText());
+        float totalAmount = roomCost + (float)serviceCost;
+        jTextField8.setText(String.format("%.2f", totalAmount));
+    }
+    
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
